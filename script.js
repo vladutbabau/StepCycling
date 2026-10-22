@@ -445,26 +445,8 @@ class App {
     // console.log(
     //   `Coordonatele au fost preluate cu succes - longitudine: ${longitude}, latitudine: ${latitude}`
     // );
-    // Harta principala: Stadia Maps (tema inchisa).
-    // Pe localhost merge fara cont; pe un site publicat (ex. GitHub Pages)
-    // merge doar daca adresa site-ului e adaugata in contul Stadia.
-    const osm =
-      '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
-    const stadia = L.tileLayer(
-      'https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}.png',
-      { attribution: `&copy; <a href="https://stadiamaps.com/">Stadia Maps</a> ${osm}` }
-    ).addTo(this.#map);
-    // Daca Stadia refuza (adresa neinregistrata), trecem pe harta
-    // standard OpenStreetMap, care nu cere cont. E deschisa la culoare,
-    // asa ca o intunecam din CSS (clasa "tiles--dark" din style.css).
-    stadia.once('tileerror', () => {
-      this.#map.removeLayer(stadia);
-      L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: osm,
-        maxZoom: 19,
-        className: 'tiles--dark',
-      }).addTo(this.#map);
-    });
+    // Fundalul hartii (imaginile cu strazi)
+    this._addMapTiles();
     // Click-uri pe harta
     this.#map.on('click', this._handleMapClick.bind(this));
     // Stratul pe care desenam traseul temporar
@@ -482,6 +464,42 @@ class App {
     // Antrenamentele salvate fara internet au ramas cu linii drepte:
     // incercam sa le refacem pe strazi
     this._repairStraightRoutes();
+  }
+
+  async _addMapTiles() {
+    // Harta principala: Stadia Maps (tema inchisa).
+    // Pe localhost merge fara cont; pe un site publicat (ex. GitHub Pages)
+    // merge doar daca adresa site-ului e adaugata in contul Stadia.
+    // Daca nu, Stadia trimite imagini cu "401 Error" in loc de harta,
+    // asa ca intai cerem o singura imagine de proba si vedem raspunsul.
+    const osm =
+      '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
+    const stadiaUrl =
+      'https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}.png';
+
+    let stadiaWorks = false;
+    try {
+      const res = await fetch(stadiaUrl.replace('{z}/{x}/{y}', '0/0/0'), {
+        signal: AbortSignal.timeout(5000),
+      });
+      stadiaWorks = res.ok;
+    } catch {
+      // Fara raspuns (internet picat, server lent): folosim rezerva
+    }
+
+    if (stadiaWorks) {
+      L.tileLayer(stadiaUrl, {
+        attribution: `&copy; <a href="https://stadiamaps.com/">Stadia Maps</a> ${osm}`,
+      }).addTo(this.#map);
+    } else {
+      // Rezerva: harta standard OpenStreetMap, care nu cere cont.
+      // E deschisa la culoare, asa ca o intunecam din CSS (".tiles--dark").
+      L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: osm,
+        maxZoom: 19,
+        className: 'tiles--dark',
+      }).addTo(this.#map);
+    }
   }
 
   _handleMapClick(mapE) {
