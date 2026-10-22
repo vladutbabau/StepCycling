@@ -1042,11 +1042,12 @@ a:visited {
     height: auto;
   }
 
-  /* Bara cu lista ocupa restul ecranului si se deruleaza toata */
+  /* Bara cu lista ocupa restul ecranului si se deruleaza toata.
+     Sus si jos nu are spatiu, pentru ca acolo stau antetul si subsolul fixe */
   .sidebar {
     flex: 1 1 auto;
     min-height: 0;
-    padding: 1.5rem 1.6rem 2rem;
+    padding: 0 1.6rem;
     overflow-y: auto;
     scrollbar-width: none; /* ascundem bara de derulare, ca la lista */
   }
@@ -1055,8 +1056,32 @@ a:visited {
     width: 0;
   }
 
+  /* Antetul (☰ + logo) ramane lipit sus cand derulezi lista */
   .sidebar__header {
-    margin-bottom: 1.5rem;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    margin: 0 -1.6rem 1.2rem;
+    padding: 1.2rem 1.6rem;
+    background-color: var(--color-dark--1);
+    box-shadow: 0 0.6rem 1.2rem rgba(0, 0, 0, 0.35);
+  }
+
+  /* Butonul ☰ sta tot in stanga, dar in interiorul spatiului antetului */
+  .sidebar__header .menu-btn {
+    left: 1.6rem;
+  }
+
+  /* Subsolul cu "Resetează" ramane lipit jos */
+  .form__btns {
+    position: sticky;
+    bottom: 0;
+    z-index: 10;
+    /* "auto" sus: subsolul sta jos pe ecran si cand lista e scurta */
+    margin: auto -1.6rem 0;
+    padding: 0.2rem 1.6rem 1.2rem;
+    background-color: var(--color-dark--1);
+    box-shadow: 0 -0.6rem 1.2rem rgba(0, 0, 0, 0.35);
   }
 
   .logo {

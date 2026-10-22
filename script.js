@@ -328,6 +328,8 @@ class App {
     if (step === 5) {
       tutorialCard.classList.remove('tutorial--hidden');
       summaryBox.classList.add('tutorial-highlight');
+      // Pe telefon sumarul poate fi mai jos in lista: il aducem in vizor
+      summaryBox.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
       menuBtn.classList.add('tutorial-highlight');
     }
   }
