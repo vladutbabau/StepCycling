@@ -4,6 +4,10 @@
 
 Aplicația e scrisă în HTML, CSS și JavaScript simplu, fără framework-uri și fără pas de build. Interfața este în limba română.
 
+### 🔗 [Deschide aplicația live](https://vladutbabau.github.io/StepCycling/)
+
+> Merge pe calculator și pe telefon. Antrenamentele se salvează doar în browserul tău.
+
 ![StepCycling pe calculator](screenshots/desktop.png)
 
 ---
@@ -53,6 +57,7 @@ Aplicația e scrisă în HTML, CSS și JavaScript simplu, fără framework-uri �
 ### 1. Harta și locația ta
 
 - Harta interactivă e făcută cu **Leaflet**, cu o temă închisă la culoare (Stadia Maps, *Alidade Smooth Dark*).
+- Dacă Stadia Maps refuză adresa site-ului, aplicația trece singură pe **harta OpenStreetMap**, întunecată cu un filtru CSS, ca să rămână tema închisă.
 - La pornire, aplicația îți cere locația și centrează harta pe tine.
 - Dacă refuzi permisiunea sau browserul nu poate afla locația, harta pornește din **București** și apare un mesaj care explică ce s-a întâmplat.
 
@@ -198,7 +203,8 @@ Nu trebuie instalat nimic altceva: Leaflet se încarcă de pe CDN (unpkg), cu ve
 
 - **HTML5, CSS3, JavaScript (ES2022)**: clase, câmpuri private (`#`), `async` / `await`, `fetch`, `Promise.allSettled`.
 - **[Leaflet 1.9.4](https://leafletjs.com/)** pentru harta interactivă, traseele, pinii și etichetele.
-- **[Stadia Maps](https://stadiamaps.com/)** pentru aspectul hărții (*Alidade Smooth Dark*), cu date **© OpenStreetMap**.
+- **[Stadia Maps](https://stadiamaps.com/)** pentru aspectul hărții (*Alidade Smooth Dark*), cu date **© OpenStreetMap**. Harta de rezervă e cea standard **[OpenStreetMap](https://www.openstreetmap.org/)**.
+- **GitHub Pages** pentru versiunea live.
 - **[OSRM](https://routing.openstreetmap.de/)** și **[Valhalla](https://valhalla1.openstreetmap.de/)** pentru calculul traseelor pe străzi.
 - **Geolocation API** pentru locația utilizatorului.
 - **localStorage** pentru salvarea antrenamentelor.
@@ -257,7 +263,7 @@ Alte părți importante:
 
 ## Servicii externe și limite
 
-- **Stadia Maps** merge pe `localhost` fără cheie. Dacă publici aplicația pe un domeniu (de exemplu GitHub Pages), trebuie să îți faci un cont gratuit la Stadia Maps și să adaugi domeniul acolo, altfel harta nu se încarcă.
+- **Stadia Maps** merge pe `localhost` fără cont. Pe un site publicat (de exemplu GitHub Pages) merge doar dacă adresa site-ului e adăugată într-un cont gratuit Stadia Maps. Până atunci, aplicația folosește automat harta de rezervă **OpenStreetMap**, deci funcționează oricum.
 - **OSRM** și **Valhalla** sunt servere publice gratuite, cu limite de folosire rezonabilă. Pentru o aplicație folosită de mulți utilizatori ar fi nevoie de un server de rutare propriu.
 - Pașii pe minut sunt o **estimare**: aplicația consideră că un pas are aproximativ 1 metru.
 

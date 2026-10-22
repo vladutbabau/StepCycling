@@ -445,13 +445,26 @@ class App {
     // console.log(
     //   `Coordonatele au fost preluate cu succes - longitudine: ${longitude}, latitudine: ${latitude}`
     // );
-    L.tileLayer(
+    // Harta principala: Stadia Maps (tema inchisa).
+    // Pe localhost merge fara cont; pe un site publicat (ex. GitHub Pages)
+    // merge doar daca adresa site-ului e adaugata in contul Stadia.
+    const osm =
+      '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
+    const stadia = L.tileLayer(
       'https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}.png',
-      {
-        attribution:
-          '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-      }
+      { attribution: `&copy; <a href="https://stadiamaps.com/">Stadia Maps</a> ${osm}` }
     ).addTo(this.#map);
+    // Daca Stadia refuza (adresa neinregistrata), trecem pe harta
+    // standard OpenStreetMap, care nu cere cont. E deschisa la culoare,
+    // asa ca o intunecam din CSS (clasa "tiles--dark" din style.css).
+    stadia.once('tileerror', () => {
+      this.#map.removeLayer(stadia);
+      L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: osm,
+        maxZoom: 19,
+        className: 'tiles--dark',
+      }).addTo(this.#map);
+    });
     // Click-uri pe harta
     this.#map.on('click', this._handleMapClick.bind(this));
     // Stratul pe care desenam traseul temporar

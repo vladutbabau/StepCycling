@@ -549,6 +549,13 @@ a:visited {
   background-color: var(--color-light--1);
 }
 
+/* Harta de rezerva (OpenStreetMap) e deschisa la culoare: o intunecam,
+   ca sa semene cu tema inchisa a aplicatiei */
+.tiles--dark {
+  filter: invert(1) hue-rotate(180deg) brightness(0.9) contrast(0.85)
+    saturate(0.4);
+}
+
 /* Popup width is defined in JS using options */
 .leaflet-popup .leaflet-popup-content-wrapper {
   background-color: var(--color-dark--1);
