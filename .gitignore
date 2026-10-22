@@ -1,0 +1,12 @@
+# Instructiuni pentru Claude Code (raman doar pe calculatorul meu)
+CLAUDE.md
+.claude/
+
+# Imagini vechi si imagini din curs, care nu fac parte din aplicatie
+*-vechi.png
+Mapty-*.png
+
+# Fisiere ale sistemului de operare / editorului
+.DS_Store
+Thumbs.db
+.vscode/

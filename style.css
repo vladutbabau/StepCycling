@@ -1,0 +1,1160 @@
+:root {
+  --color-brand--1: #ffb545;
+  --color-brand--2: #00c46a;
+
+  --color-dark--1: #2d3439;
+  --color-dark--2: #42484d;
+  --color-light--1: #aaa;
+  --color-light--2: #ececec;
+  --color-light--3: rgb(214, 222, 224);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: inherit;
+}
+
+html {
+  font-size: 62.5%;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Manrope', sans-serif;
+  color: var(--color-light--2);
+  font-weight: 400;
+  line-height: 1.6;
+  height: 100vh;
+  overscroll-behavior-y: none;
+
+  background-color: #fff;
+  padding: 2.5rem;
+
+  display: flex;
+}
+
+/* GENERAL */
+a:link,
+a:visited {
+  color: var(--color-brand--1);
+}
+
+/* SIDEBAR */
+.sidebar {
+  flex-basis: 50rem;
+  background-color: var(--color-dark--1);
+  padding: 3rem 5rem 4rem 5rem;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Randul de sus: meniul ☰ in stanga, logo-ul in mijloc */
+.sidebar__header {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 4rem;
+}
+
+.logo {
+  height: 5.2rem;
+}
+
+/* Butonul ☰ (trei linii) */
+.menu-btn {
+  position: absolute;
+  left: 0;
+  width: 4.4rem;
+  height: 4.4rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  border: none;
+  border-radius: 8px;
+  background-color: var(--color-dark--2);
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.menu-btn:hover {
+  background-color: #50575c;
+}
+
+.menu-btn span {
+  display: block;
+  width: 2rem;
+  height: 3px;
+  border-radius: 2px;
+  background-color: var(--color-light--2);
+}
+
+/* MENIUL CU STATISTICI (panou care iese din partea stanga) */
+.stats {
+  margin: 0;
+  inset: 0 auto 0 0;
+  width: min(46rem, 100vw);
+  height: 100vh;
+  max-width: 100vw;
+  max-height: 100vh;
+  padding: 3rem;
+  border: none;
+  background-color: var(--color-dark--1);
+  color: var(--color-light--2);
+  font-family: inherit;
+  overflow-y: auto;
+  box-shadow: 1rem 0 4rem rgba(0, 0, 0, 0.5);
+}
+
+.stats[open] {
+  animation: stats-slide-in 0.3s ease-out;
+}
+
+@keyframes stats-slide-in {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.stats::backdrop {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.stats__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.stats__title {
+  font-size: 2.4rem;
+}
+
+.stats__close {
+  width: 3.6rem;
+  height: 3.6rem;
+  font-size: 1.8rem;
+  color: var(--color-light--2);
+  background-color: var(--color-dark--2);
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.stats__close:hover {
+  background-color: #50575c;
+}
+
+.stats__section {
+  font-size: 1.3rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-light--1);
+  margin: 2rem 0 1rem;
+}
+
+.stats__empty {
+  font-size: 1.5rem;
+  color: var(--color-light--1);
+}
+
+.stats__card {
+  padding: 1.5rem 2rem;
+  margin-bottom: 1.2rem;
+  border-radius: 5px;
+  background-color: var(--color-dark--2);
+}
+
+.stats__card--running {
+  border-left: 5px solid var(--color-brand--2);
+}
+
+.stats__card--cycling {
+  border-left: 5px solid var(--color-brand--1);
+}
+
+.stats__card-title {
+  font-size: 1.7rem;
+  margin-bottom: 0.8rem;
+}
+
+/* Lista "eticheta : valoare" pe doua coloane */
+.stats__list {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.4rem 1rem;
+  font-size: 1.4rem;
+}
+
+.stats__list dt {
+  color: var(--color-light--1);
+}
+
+.stats__list dd {
+  font-weight: 700;
+  text-align: right;
+}
+
+/* Tabelul cu km din fiecare luna */
+.stats__table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 1.4rem;
+}
+
+.stats__table th,
+.stats__table td {
+  padding: 0.8rem 0.6rem;
+  text-align: right;
+  border-bottom: 1px solid var(--color-dark--2);
+}
+
+.stats__table th:first-child,
+.stats__table td:first-child {
+  text-align: left;
+}
+
+.stats__table th {
+  font-size: 1.3rem;
+  color: var(--color-light--1);
+  /* "Mers cu bicicleta" poate trece pe doua randuri; il aliniem jos */
+  vertical-align: bottom;
+  line-height: 1.3;
+}
+
+.stats__table tbody tr:hover {
+  background-color: var(--color-dark--2);
+}
+
+.workouts {
+  list-style: none;
+  /* Lista ocupa tot locul ramas, ca sumarul si butonul sa incapa dedesubt */
+  flex: 1;
+  min-height: 0;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+.workouts::-webkit-scrollbar {
+  width: 0;
+}
+
+.workout {
+  background-color: var(--color-dark--2);
+  border-radius: 5px;
+  padding: 1.5rem 2.25rem;
+  margin-bottom: 1.75rem;
+  cursor: pointer;
+
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 0.75rem 1.5rem;
+}
+.workout--running {
+  border-left: 5px solid var(--color-brand--2);
+}
+.workout--cycling {
+  border-left: 5px solid var(--color-brand--1);
+}
+
+/* Titlul si butoanele (modifica / sterge) pe acelasi rand */
+.workout__header {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.workout__title {
+  font-size: 1.7rem;
+  font-weight: 600;
+}
+
+.workout__actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+/* Butoane patrate, cu bordura subtire */
+.workout__btn {
+  width: 3rem;
+  height: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: 1px solid var(--color-light--1);
+  border-radius: 0;
+  color: #fff; /* culoarea creionului si a cosului de gunoi */
+  font-size: 1.4rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.workout__btn:hover {
+  border-color: #fff;
+  background-color: var(--color-dark--1);
+}
+
+.workout__details {
+  display: flex;
+  align-items: baseline;
+}
+
+.workout__icon {
+  font-size: 1.8rem;
+  margin-right: 0.2rem;
+  height: 0.28rem;
+}
+
+.workout__value {
+  font-size: 1.5rem;
+  margin-right: 0.5rem;
+}
+
+.workout__unit {
+  font-size: 1.1rem;
+  color: var(--color-light--1);
+  text-transform: uppercase;
+  font-weight: 800;
+}
+
+.form {
+  background-color: var(--color-dark--2);
+  border-radius: 5px;
+  padding: 1.5rem 2.75rem;
+  margin-bottom: 1.75rem;
+
+  /* Toate randurile unul sub altul, pe toata latimea: asa campurile
+     (Tip, Durata, Denivelare) au aceeasi lungime si sunt aliniate */
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.8rem;
+
+  /* Match height and activity boxes */
+  /* height: 9.25rem; */
+  height: auto;
+  transition: all 0.5s, transform 1ms;
+}
+
+/* X-ul din coltul dreapta-sus al formularului */
+.form {
+  position: relative;
+}
+
+.form__close {
+  position: absolute;
+  top: 0.8rem;
+  right: 0.8rem;
+  width: 3rem;
+  height: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: inherit;
+  font-size: 1.5rem;
+  line-height: 1;
+  color: var(--color-light--1);
+  background: none;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.form__close:hover {
+  color: var(--color-light--2);
+  background-color: var(--color-dark--1);
+}
+
+/* Cand formularul e ascuns, nici X-ul nu trebuie sa poata fi apasat */
+.form.hidden .form__close {
+  display: none;
+}
+
+.form.hidden {
+  transform: translateY(-30rem);
+  height: 0;
+  padding: 0 2.25rem;
+  margin-bottom: 0;
+  opacity: 0;
+}
+
+.form__hint {
+  grid-column: 1 / -1;
+  padding-right: 2.5rem; /* loc pentru X-ul din colt */
+  font-size: 1.3rem;
+  color: var(--color-light--1);
+  margin-bottom: 0.5rem;
+}
+
+.form__row {
+  display: flex;
+  align-items: center;
+}
+
+.form__row--hidden {
+  display: none;
+}
+
+.form__label {
+  flex: 0 0 9rem;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.form__input {
+  width: 100%;
+  padding: 0.5rem 1.1rem;
+  font-family: inherit;
+  font-size: 1.4rem;
+  font-weight: 600;
+  /* Fundal inchis + text deschis = contrast mare, se citeste usor */
+  color: var(--color-light--2);
+  background-color: var(--color-dark--1);
+  border: 2px solid #6b7277;
+  border-radius: 5px;
+  transition: all 0.2s;
+}
+
+/* Campul cu unitate lipita de numar (Durata: "25 minute") */
+.form__field {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+}
+
+.form__suffix {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.4rem;
+  font-weight: 400;
+  color: var(--color-light--1);
+  pointer-events: none; /* click-ul trece prin el, in camp */
+  white-space: nowrap;
+}
+
+/* Textul ajutator din camp (ex: "minute") */
+.form__input::placeholder {
+  color: var(--color-light--1);
+  font-weight: 400;
+}
+
+/* Optiunile din lista "Tip antr." */
+.form__input option {
+  color: var(--color-light--2);
+  background-color: var(--color-dark--1);
+}
+
+/* Cand treci cu mouse-ul peste camp, chenarul se lumineaza */
+.form__input:hover {
+  border-color: var(--color-light--3);
+}
+
+/* Cand scrii in camp, chenarul devine verde */
+.form__input:focus {
+  outline: none;
+  border-color: var(--color-brand--2);
+  background-color: #23292d;
+}
+
+/* Campurile calculate automat (Distanta, Ritmul) nu se pot modifica:
+   au chenar punctat si fundal transparent, dar textul ramane clar */
+.form__input[readonly],
+.form__input[readonly]:hover,
+.form__input[readonly]:focus {
+  background-color: transparent;
+  border-style: dashed;
+  border-color: #6b7277;
+  cursor: not-allowed;
+}
+
+.form__input[readonly]::placeholder {
+  color: var(--color-light--3);
+}
+.form__btns {
+  display: flex;
+  gap: 10px;
+  padding-bottom: 10px;
+  justify-content: center;
+}
+.form__btn {
+  /* flex: 1; Butoanele să aibă dimensiuni egale */
+  padding: 1rem; /* Dimensiune suficientă pentru text */
+  font-size: 1.4rem; /* Text vizibil și consistent */
+  cursor: pointer; /* Pointer pe hover */
+  border: none; /* Elimină stilurile implicite */
+  border-radius: 5px; /* Colțuri rotunjite */
+  text-align: center; /* Aliniere centrală a textului */
+  align-items: center;
+  margin-top: 10px;
+}
+
+.form__btn--ok {
+  background-color: #4caf50; /* Verde pentru "OK" */
+  color: white; /* Text alb */
+}
+
+/* Randul cu butoanele din formular ocupa toata latimea */
+.form__actions {
+  grid-column: 1 / -1;
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+}
+
+.form__btn--clear-route {
+  background-color: var(--color-dark--1);
+  color: var(--color-light--2);
+}
+
+.form__btn--reset {
+  background-color: #f44336; /* Roșu pentru "Reset" */
+  color: white; /* Text alb */
+}
+
+.copyright {
+  margin-top: auto;
+  font-size: 1.3rem;
+  text-align: center;
+  color: var(--color-light--1);
+}
+
+.twitter-link:link,
+.twitter-link:visited {
+  color: var(--color-light--1);
+  transition: all 0.2s;
+}
+
+.twitter-link:hover,
+.twitter-link:active {
+  color: var(--color-light--2);
+}
+
+/* MAP */
+#map {
+  flex: 1;
+  height: 100%;
+  background-color: var(--color-light--1);
+}
+
+/* Popup width is defined in JS using options */
+.leaflet-popup .leaflet-popup-content-wrapper {
+  background-color: var(--color-dark--1);
+  color: var(--color-light--2);
+  border-radius: 5px;
+  padding-right: 0.6rem;
+}
+
+.leaflet-popup .leaflet-popup-content {
+  font-size: 1.5rem;
+}
+
+/* SUMARUL LUNII (km la alergare si la bicicleta, deasupra butonului Reseteaza) */
+.summary {
+  margin-top: 1.5rem;
+  padding: 1.5rem 2.25rem;
+  border-radius: 5px;
+  background-color: var(--color-dark--2);
+}
+
+.summary__title {
+  font-size: 1.3rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-light--1);
+  margin-bottom: 0.8rem;
+}
+
+.summary__row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 1.6rem;
+  padding: 0.3rem 0 0.3rem 1rem;
+}
+
+.summary__row--running {
+  border-left: 4px solid var(--color-brand--2);
+}
+
+.summary__row--cycling {
+  border-left: 4px solid var(--color-brand--1);
+  margin-top: 0.5rem;
+}
+
+.summary__value {
+  font-size: 1.8rem;
+  font-weight: 800;
+}
+
+/* Randurile calculate automat (Distanta, Ritmul) nu apar in formular */
+.form__row--auto {
+  display: none;
+}
+
+/* FEREASTRA DE GHIDARE (apare cand nu ai niciun antrenament) */
+.guide {
+  /* "margin: auto" o pune in centrul ecranului
+     (regula "* { margin: 0 }" de sus anula centrarea) */
+  margin: auto;
+  max-width: 46rem;
+  width: calc(100% - 3.2rem);
+  padding: 3rem 3.5rem;
+  border: none;
+  border-top: 5px solid var(--color-brand--2);
+  border-radius: 8px;
+  background-color: var(--color-dark--1);
+  color: var(--color-light--2);
+  font-family: inherit;
+  box-shadow: 0 2rem 5rem rgba(0, 0, 0, 0.5);
+}
+
+/* Ferestrele de stergere au dunga de sus rosie (actiune periculoasa) */
+.confirm-delete,
+.confirm-reset {
+  border-top-color: #f44336;
+}
+
+/* Fundalul intunecat din spatele ferestrei */
+.guide::backdrop {
+  background-color: rgba(0, 0, 0, 0.6);
+}
+
+.guide__title {
+  font-size: 2.2rem;
+  margin-bottom: 1.2rem;
+}
+
+.guide__text {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.guide__steps {
+  font-size: 1.5rem;
+  line-height: 1.6;
+  padding-left: 2rem;
+  margin-bottom: 1.5rem;
+}
+
+.guide__steps li {
+  margin-bottom: 0.8rem;
+}
+
+.guide__steps strong {
+  color: var(--color-brand--2);
+}
+
+.guide__note {
+  font-size: 1.3rem;
+  color: var(--color-light--1);
+  margin-bottom: 2rem;
+}
+
+.guide__btn {
+  display: block;
+  width: 100%;
+  padding: 1rem;
+  font-family: inherit;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #fff;
+  background-color: #4caf50;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.guide__btn:hover {
+  background-color: #43a047;
+}
+
+/* Al doilea buton din fereastra (mai discret) */
+.guide__btn--secondary {
+  margin-top: 1rem;
+  color: var(--color-light--2);
+  background-color: var(--color-dark--2);
+}
+
+.guide__btn--secondary:hover {
+  background-color: #50575c;
+}
+
+/* Butonul de stergere din fereastra de la finalul tutorialului */
+.guide__btn--danger {
+  margin-top: 1rem;
+  background-color: #f44336;
+}
+
+.guide__btn--danger:hover {
+  background-color: #e53935;
+}
+
+/* TUTORIAL: caseta cu pasii, in coltul hartii */
+.tutorial {
+  position: fixed;
+  top: 4.5rem;
+  right: 4.5rem;
+  z-index: 2000;
+  max-width: 34rem;
+  padding: 1.8rem 2rem;
+  border-left: 5px solid var(--color-brand--2);
+  border-radius: 8px;
+  background-color: var(--color-dark--1);
+  color: var(--color-light--2);
+  box-shadow: 0 1.5rem 4rem rgba(0, 0, 0, 0.5);
+}
+
+.tutorial--hidden {
+  display: none;
+}
+
+.tutorial__step {
+  font-size: 1.2rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-brand--2);
+  margin-bottom: 0.6rem;
+}
+
+.tutorial__text {
+  font-size: 1.5rem;
+  margin-bottom: 1.2rem;
+}
+
+.tutorial__skip {
+  font-family: inherit;
+  font-size: 1.3rem;
+  color: var(--color-light--1);
+  background: none;
+  border: none;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.tutorial__skip:hover {
+  color: var(--color-light--2);
+}
+
+/* Caseta se scutura cand dai click in alta parte a hartii */
+.tutorial--shake {
+  animation: tutorial-shake 0.4s;
+}
+
+@keyframes tutorial-shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-8px);
+  }
+  75% {
+    transform: translateX(8px);
+  }
+}
+
+/* Cercul care pulseaza pe harta, unde trebuie dat click */
+.tutorial-target {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.tutorial-target__pulse,
+.tutorial-target__dot {
+  position: absolute;
+  border-radius: 50%;
+}
+
+/* Inelul care creste si dispare, la nesfarsit */
+.tutorial-target__pulse {
+  inset: 0;
+  border: 3px solid var(--color-brand--2);
+  animation: tutorial-pulse 1.4s ease-out infinite;
+}
+
+/* Punctul din mijloc */
+.tutorial-target__dot {
+  inset: 12px;
+  background-color: var(--color-brand--2);
+  box-shadow: 0 0 0 3px var(--color-dark--1);
+}
+
+/* Mana care "apasa" pe cerc */
+.tutorial-target__hand {
+  position: absolute;
+  left: 22px;
+  top: 26px;
+  font-size: 2.6rem;
+  line-height: 1;
+  animation: tutorial-tap 1.4s ease-in-out infinite;
+}
+
+@keyframes tutorial-pulse {
+  0% {
+    transform: scale(0.5);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1.8);
+    opacity: 0;
+  }
+}
+
+@keyframes tutorial-tap {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(-4px, -6px);
+  }
+}
+
+/* Campul sau butonul la care trebuie sa ajunga utilizatorul (pasii 3 si 4) */
+.tutorial-highlight {
+  animation: tutorial-glow 1.2s ease-in-out infinite;
+}
+
+@keyframes tutorial-glow {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(0, 196, 106, 0.8);
+  }
+  50% {
+    box-shadow: 0 0 0 6px rgba(0, 196, 106, 0.25);
+  }
+}
+
+/* Eticheta de pe harta: se poate apasa ca sa arate detaliile */
+.popup {
+  cursor: pointer;
+  user-select: none;
+}
+
+.popup__title {
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* Sageata mica de langa titlu: arata ca eticheta se poate deschide */
+.popup__title::after {
+  content: ' ▾';
+  font-size: 1.2rem;
+  color: var(--color-light--1);
+}
+
+.popup--open .popup__title::after {
+  content: ' ▴';
+}
+
+/* Detaliile sunt ascunse pana dai click pe eticheta */
+.popup__details {
+  display: none;
+  list-style: none;
+  margin: 0.8rem 0 0;
+  padding: 0.8rem 0 0;
+  border-top: 1px solid var(--color-dark--2);
+  font-size: 1.4rem;
+  line-height: 1.7;
+  white-space: nowrap;
+}
+
+.popup--open .popup__details {
+  display: block;
+}
+
+.leaflet-popup .leaflet-popup-tip {
+  background-color: var(--color-dark--1);
+}
+
+/* Steagul de finish de la capatul traseului */
+.finish-flag {
+  font-size: 2.4rem;
+  line-height: 1;
+  background: none;
+  border: none;
+}
+
+/* Emoji-ul din steag. Animatia se pune pe el, nu pe .finish-flag,
+   pentru ca Leaflet foloseste transform pe .finish-flag ca sa-l pozitioneze */
+.finish-flag__icon {
+  display: inline-block;
+  /* Steagul "creste" din baza bastonului */
+  transform-origin: 20% 95%;
+}
+
+.finish-flag__icon--pop {
+  animation: flag-pop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes flag-pop {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.running-popup .leaflet-popup-content-wrapper {
+  border-left: 5px solid var(--color-brand--2);
+}
+.cycling-popup .leaflet-popup-content-wrapper {
+  border-left: 5px solid var(--color-brand--1);
+}
+
+.error__message {
+  color: #f44336;
+}
+.error__message--hide {
+  display: none;
+}
+
+/* MODUL "FOCUS" (cand traseele se suprapun) */
+
+/* Traseele, pinii si etichetele celorlalte antrenamente se estompeaza */
+.layer--dimmed {
+  opacity: 0.15;
+  transition: opacity 0.3s;
+}
+
+.leaflet-popup.layer--dimmed {
+  opacity: 0.35;
+}
+
+/* Antrenamentul ales, in lista */
+.workout--selected {
+  box-shadow: 0 0 0 2px var(--color-light--2);
+}
+
+/* Butonul care arata iar toate traseele */
+.show-all {
+  position: fixed;
+  bottom: 4.5rem;
+  right: 4.5rem;
+  z-index: 1500;
+  padding: 1rem 1.8rem;
+  font-family: inherit;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--color-light--2);
+  background-color: var(--color-dark--1);
+  border: 2px solid var(--color-light--1);
+  border-radius: 50px;
+  box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.4);
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.show-all:hover {
+  border-color: var(--color-light--2);
+}
+
+.show-all--hidden {
+  display: none;
+}
+
+/* ===================================================================
+   RESPONSIVE: aplicatia se adapteaza la ecrane mai mici
+   =================================================================== */
+
+/* Laptop mic / tableta asezata orizontal */
+@media (max-width: 1100px) {
+  body {
+    padding: 1.5rem;
+  }
+
+  .sidebar {
+    flex-basis: 40rem;
+    padding: 2.5rem 3rem 3rem;
+  }
+
+  .workout {
+    padding: 1.5rem 1.75rem;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .form {
+    padding: 1.5rem 2rem;
+  }
+}
+
+/* Ecran jos (ex. laptop mic sau tableta orizontala): lista ar ramane
+   prea mica, asa ca se deruleaza toata bara din stanga */
+@media (max-height: 760px) {
+  .sidebar {
+    overflow-y: auto;
+    scrollbar-width: none;
+  }
+
+  .sidebar::-webkit-scrollbar {
+    width: 0;
+  }
+
+  .sidebar__header {
+    margin-bottom: 2rem;
+  }
+
+  .workouts {
+    flex: none;
+    overflow: visible;
+  }
+}
+
+/* Telefon (si tableta tinuta vertical):
+   harta sus, lista cu antrenamente dedesubt.
+   Aceeasi latime ca isMobile() din script.js */
+@media (max-width: 768px) {
+  body {
+    padding: 0;
+    flex-direction: column-reverse; /* harta (ultima in HTML) apare sus */
+    height: 100vh;
+    height: 100dvh; /* inaltimea reala pe telefon, fara bara browserului */
+  }
+
+  #map {
+    flex: 0 0 50%;
+    height: auto;
+  }
+
+  /* Bara cu lista ocupa restul ecranului si se deruleaza toata */
+  .sidebar {
+    flex: 1 1 auto;
+    min-height: 0;
+    padding: 1.5rem 1.6rem 2rem;
+    overflow-y: auto;
+    scrollbar-width: none; /* ascundem bara de derulare, ca la lista */
+  }
+
+  .sidebar::-webkit-scrollbar {
+    width: 0;
+  }
+
+  .sidebar__header {
+    margin-bottom: 1.5rem;
+  }
+
+  .logo {
+    height: 4rem;
+  }
+
+  .menu-btn {
+    width: 4rem;
+    height: 4rem;
+  }
+
+  /* Lista nu mai are scroll propriu: se deruleaza toata bara */
+  .workouts {
+    flex: none;
+    overflow: visible;
+  }
+
+  .workout {
+    padding: 1.4rem 1.6rem;
+    gap: 0.6rem 1rem;
+  }
+
+  .workout__title {
+    font-size: 1.5rem;
+  }
+
+  /* Butoane mai mari, usor de apasat cu degetul */
+  .workout__btn {
+    width: 3.8rem;
+    height: 3.8rem;
+  }
+
+  .form {
+    padding: 1.5rem 1.6rem;
+  }
+
+  .form__btn {
+    padding: 1.1rem 1.4rem;
+  }
+
+  /* X mai mare, usor de apasat cu degetul */
+  .form__close {
+    top: 0.4rem;
+    right: 0.4rem;
+    width: 4rem;
+    height: 4rem;
+    font-size: 1.8rem;
+  }
+
+  .form__hint {
+    padding-right: 3.5rem;
+  }
+
+  /* Butonul "Arata toate traseele": sus, pe harta */
+  .show-all {
+    top: 1rem;
+    right: 1rem;
+    bottom: auto;
+    padding: 0.8rem 1.4rem;
+    font-size: 1.3rem;
+  }
+
+  /* Caseta tutorialului: sus, pe toata latimea */
+  .tutorial {
+    top: 1rem;
+    left: 1rem;
+    right: 1rem;
+    max-width: none;
+    padding: 1.2rem 1.6rem;
+  }
+
+  .tutorial__text {
+    font-size: 1.4rem;
+    margin-bottom: 0.6rem;
+  }
+
+  .guide {
+    padding: 2.4rem 2rem;
+  }
+
+  .guide__title {
+    font-size: 2rem;
+  }
+
+  .stats {
+    padding: 2rem 1.6rem;
+  }
+}
+
+/* Telefon mic */
+@media (max-width: 420px) {
+  .form__actions {
+    flex-direction: column-reverse;
+  }
+
+  .form__actions .form__btn {
+    width: 100%;
+  }
+
+  .stats__table {
+    font-size: 1.3rem;
+  }
+
+  .stats__table th,
+  .stats__table td {
+    padding: 0.7rem 0.3rem;
+  }
+}

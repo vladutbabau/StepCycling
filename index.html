@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="ro">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+
+    <!-- Informatii despre pagina (pentru Google si pentru browser) -->
+    <meta
+      name="description"
+      content="StepCycling: noteaza-ti alergarile si turele cu bicicleta pe harta. Deseneaza traseul, iar aplicatia calculeaza distanta, ritmul si viteza."
+    />
+    <meta
+      name="keywords"
+      content="alergare, ciclism, bicicleta, antrenament, traseu, harta, fitness, StepCycling"
+    />
+    <meta name="author" content="Babau Vlad Andrei" />
+    <meta name="robots" content="index, follow" />
+    <!-- Culoarea barei browserului pe telefon -->
+    <meta name="theme-color" content="#2d3439" />
+    <meta name="color-scheme" content="dark" />
+
+    <!-- Cum arata linkul cand e trimis pe Facebook, WhatsApp etc. -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="StepCycling" />
+    <meta property="og:title" content="StepCycling" />
+    <meta
+      property="og:description"
+      content="Noteaza-ti alergarile si turele cu bicicleta pe harta."
+    />
+    <meta property="og:image" content="logo.png" />
+    <meta property="og:locale" content="ro_RO" />
+
+    <!-- Cum arata linkul cand e trimis pe X (Twitter) -->
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="StepCycling" />
+    <meta
+      name="twitter:description"
+      content="Noteaza-ti alergarile si turele cu bicicleta pe harta."
+    />
+    <meta name="twitter:image" content="logo.png" />
+
+    <!-- Iconite -->
+    <link rel="icon" type="image/png" href="/icon.png" />
+    <link rel="apple-touch-icon" href="/icon.png" />
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="style.css" />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+      crossorigin=""
+    />
+    <script
+      defer
+      src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+      crossorigin=""
+    ></script>
+    <script defer src="script.js"></script>
+    <title>StepCycling</title>
+  </head>
+  <body>
+    <div class="sidebar">
+      <div class="sidebar__header">
+        <!-- Meniul ☰ cu statisticile (cele trei linii sunt desenate din CSS) -->
+        <button class="menu-btn" type="button" title="Statistici" aria-label="Deschide statisticile">
+          <span></span><span></span><span></span>
+        </button>
+        <img src="logo.png" alt="Logo" class="logo" />
+      </div>
+
+      <ul class="workouts">
+        <form class="form hidden">
+          <!-- X-ul din colt: inchide formularul (la fel ca tasta Esc) -->
+          <button class="form__close" type="button" title="Închide" aria-label="Închide formularul">
+            ✕
+          </button>
+          <p class="form__hint">
+            Dă click pe hartă pentru a adăuga puncte pe traseu, până unde ai
+            terminat. Traseul urmează străzile, iar distanța se calculează
+            singură. Apasă ✕ (sau Esc) ca să anulezi.
+          </p>
+          <div class="form__row">
+            <label class="form__label">Tip antr.</label>
+            <select class="form__input form__input--type">
+              <option value="running">Alergare</option>
+              <option value="cycling">Mers cu bicicleta</option>
+            </select>
+          </div>
+          <!-- Distanta si Ritmul se calculeaza singure, asa ca nu le aratam
+               in formular (apar in lista dupa ce salvezi antrenamentul) -->
+          <div class="form__row form__row--auto">
+            <label class="form__label">Distanta</label>
+            <input
+              class="form__input form__input--distance"
+              placeholder="km (automat)"
+              readonly
+              tabindex="-1"
+            />
+          </div>
+          <div class="form__row">
+            <label class="form__label">Durata</label>
+            <!-- Unitatea ("minut" / "minute") sta lipita de numarul scris -->
+            <div class="form__field">
+              <input
+                class="form__input form__input--duration"
+                placeholder="minute"
+                inputmode="decimal"
+              />
+              <span class="form__suffix form__suffix--duration" aria-hidden="true"></span>
+            </div>
+          </div>
+          <div class="form__row form__row--auto">
+            <label class="form__label">Ritmul</label>
+            <input
+              class="form__input form__input--cadence"
+              placeholder="pași/min (automat)"
+              readonly
+              tabindex="-1"
+            />
+          </div>
+          <div class="form__row form__row--hidden">
+            <label class="form__label">Denivelare</label>
+            <div class="form__field">
+              <input
+                class="form__input form__input--elevation"
+                placeholder="metri (sau -)"
+              />
+              <span class="form__suffix" aria-hidden="true"></span>
+            </div>
+          </div>
+          <div class="form__actions">
+            <button class="form__btn form__btn--clear-route" type="button">
+              Traseu nou
+            </button>
+            <button class="form__btn form__btn--ok" type="submit">
+              Adaugă antrenament
+            </button>
+          </div>
+        </form>
+
+        <!-- <li class="workout workout--running" data-id="1234567890">
+          <h2 class="workout__title">Running on April 14</h2>
+          <div class="workout__details">
+            <span class="workout__icon">🏃‍♂️</span>
+            <span class="workout__value">5.2</span>
+            <span class="workout__unit">km</span>
+          </div>
+          <div class="workout__details">
+            <span class="workout__icon">⏱</span>
+            <span class="workout__value">24</span>
+            <span class="workout__unit">min</span>
+          </div>
+          <div class="workout__details">
+            <span class="workout__icon">⚡️</span>
+            <span class="workout__value">4.6</span>
+            <span class="workout__unit">min/km</span>
+          </div>
+          <div class="workout__details">
+            <span class="workout__icon">🦶🏼</span>
+            <span class="workout__value">178</span>
+            <span class="workout__unit">pași/min</span>
+          </div>
+        </li>
+
+        <li class="workout workout--cycling" data-id="1234567891">
+          <h2 class="workout__title">Cycling on April 5</h2>
+          <div class="workout__details">
+            <span class="workout__icon">🚴‍♀️</span>
+            <span class="workout__value">27</span>
+            <span class="workout__unit">km</span>
+          </div>
+          <div class="workout__details">
+            <span class="workout__icon">⏱</span>
+            <span class="workout__value">95</span>
+            <span class="workout__unit">min</span>
+          </div>
+          <div class="workout__details">
+            <span class="workout__icon">⚡️</span>
+            <span class="workout__value">16</span>
+            <span class="workout__unit">km/h</span>
+          </div>
+          <div class="workout__details">
+            <span class="workout__icon">⛰</span>
+            <span class="workout__value">223</span>
+            <span class="workout__unit">m</span>
+          </div>
+        </li> -->
+      </ul>
+
+      <!-- Cati km ai facut luna aceasta (se calculeaza din antrenamente) -->
+      <div class="summary">
+        <h3 class="summary__title">Luna aceasta</h3>
+        <div class="summary__row summary__row--running">
+          <span>🏃‍♂️ Alergare</span>
+          <span class="summary__value summary__value--running">0 km</span>
+        </div>
+        <div class="summary__row summary__row--cycling">
+          <span>🚴‍♀️ Bicicletă</span>
+          <span class="summary__value summary__value--cycling">0 km</span>
+        </div>
+      </div>
+
+      <div class="form__btns">
+        <button class="form__btn form__btn--reset">Resetează</button>
+      </div>
+
+    </div>
+
+    <div id="map"></div>
+
+    <!-- Fereastra de ghidare: apare la pornire daca nu ai niciun antrenament -->
+    <dialog class="guide">
+      <h2 class="guide__title">Bun venit în StepCycling! 👋</h2>
+      <p class="guide__text">Așa adaugi primul tău antrenament:</p>
+      <ol class="guide__steps">
+        <li>
+          <strong>Dă click pe hartă</strong> în locul de unde ai
+          <strong>început</strong> antrenamentul.
+        </li>
+        <li>
+          Dă click pe punctele prin care ai trecut. Ultimul click este
+          locul unde ai <strong>terminat</strong> 🏁.
+        </li>
+        <li>
+          Alege tipul (alergare sau bicicletă), scrie durata și apasă
+          <strong>Adaugă antrenament</strong>.
+        </li>
+      </ol>
+      <p class="guide__note">
+        Distanța și ritmul se calculează singure din traseu. Totalurile le
+        găsești în meniul ☰ de lângă logo.
+      </p>
+      <button class="guide__btn" type="button">
+        Am înțeles, arată-mi un exemplu
+      </button>
+      <button class="guide__btn guide__btn--secondary guide__skip" type="button">
+        Nu, mulțumesc
+      </button>
+    </dialog>
+
+    <!-- Apare cand e ales un antrenament: arata iar toate traseele -->
+    <button class="show-all show-all--hidden" type="button">
+      👁 Arată toate traseele
+    </button>
+
+    <!-- Meniul ☰: statisticile (se deschide din partea stanga) -->
+    <dialog class="stats">
+      <div class="stats__header">
+        <h2 class="stats__title">Statistici</h2>
+        <button class="stats__close" type="button" title="Închide" aria-label="Închide">
+          ✕
+        </button>
+      </div>
+      <!-- Continutul e completat din script.js (_statsHTML) -->
+      <div class="stats__content"></div>
+    </dialog>
+
+    <!-- Confirmare inainte sa stergem un antrenament (butonul 🗑) -->
+    <dialog class="guide confirm-delete">
+      <h2 class="guide__title">Ștergi antrenamentul? 🗑</h2>
+      <p class="guide__text">Ești sigur că vrei să ștergi antrenamentul?</p>
+      <p class="guide__note confirm-delete__name"></p>
+      <button class="guide__btn guide__btn--danger confirm-delete__yes" type="button">
+        Da, șterge-l
+      </button>
+      <button class="guide__btn guide__btn--secondary confirm-delete__no" type="button">
+        Nu, renunț
+      </button>
+    </dialog>
+
+    <!-- Confirmare inainte sa stergem toate antrenamentele -->
+    <dialog class="guide confirm-reset">
+      <h2 class="guide__title">Ștergi tot? ⚠️</h2>
+      <p class="guide__text">
+        Sigur vrei să ștergi <strong>toate</strong> antrenamentele? Nu le mai
+        poți recupera după aceea.
+      </p>
+      <button class="guide__btn guide__btn--danger confirm-reset__yes" type="button">
+        Da, șterge tot
+      </button>
+      <button class="guide__btn guide__btn--secondary confirm-reset__no" type="button">
+        Nu, renunț
+      </button>
+    </dialog>
+
+    <!-- Caseta cu pasii tutorialului (apare dupa fereastra de ghidare) -->
+    <div class="tutorial tutorial--hidden">
+      <p class="tutorial__step"></p>
+      <p class="tutorial__text"></p>
+      <button class="tutorial__skip" type="button">Sari peste tutorial</button>
+    </div>
+
+    <!-- La finalul tutorialului: pastram sau stergem antrenamentul de proba -->
+    <dialog class="guide keep">
+      <h2 class="guide__title">Felicitări! 🎉</h2>
+      <p class="guide__text">
+        Ai adăugat primul tău antrenament. Vrei să îl păstrezi pe cel din
+        tutorial?
+      </p>
+      <button class="guide__btn keep__yes" type="button">Da, îl păstrez</button>
+      <button class="guide__btn guide__btn--danger keep__no" type="button">
+        Nu, șterge-l
+      </button>
+    </dialog>
+  </body>
+</html>
