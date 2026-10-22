@@ -883,8 +883,12 @@ class App {
       ? 'Salvează modificările'
       : 'Adaugă antrenament';
     form.classList.remove('hidden');
-    // Distanta se calculeaza singura, asa ca incepem cu durata
-    inputDuration.focus();
+    // Distanta se calculeaza singura, asa ca incepem cu durata.
+    // Dar NU pe telefon si NU in tutorial: acolo cursorul in camp ar deschide
+    // tastatura si ar muta ecranul la formular, desi mai trebuie pus
+    // punctul de final pe harta. (In tutorial, campul primeste cursorul
+    // la pasul 3, dupa al doilea punct.)
+    if (!isMobile() && !this.#tutorialStep) inputDuration.focus();
   }
 
   _hideForm() {
